@@ -23,6 +23,14 @@
         </li>
       </ul>
     </li>
+    <li>
+      <a href="array">Array</a>
+      <ul>
+        <li><a href="two-pointer">Two Pointer</a></li>
+        <li><a href="sliding-window">Sliding Window</a></li>
+        <li><a href="exponential-search">Exponential Search</a></li>
+      </ul>
+    </li>
     <li><a href="#credits">Credits</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -110,6 +118,27 @@ If our algorithm scaled in O(n), when we doubled the array, we would need 6 sear
 
 When doubling the input, the execution time increased by only one.
 
+```
+# Python implementation
+
+def binary_search(nums, n):
+    lo = 0
+    hi = len(nums)
+    steps = 0
+    while lo < hi:
+        steps += 1
+    mid = int((lo + hi) / 2)
+
+    if nums(mid) == n:
+        print("step: ", steps) # Steps Taken 
+        return mid
+    elif nums(mid) < n:
+        lo = mid + 1
+    else:
+        hi = mid
+    return -1
+```
+
 ### O(n)
 
 O(n) stands for Linear Complexity. This means that the time or space required by an algorithm grows directly and proportionally with the size of the input data (n).
@@ -185,6 +214,263 @@ It's a Loop in a Loop.
   </tbody>
 </table>
 
+# Array
+
+Teoricamente os itens de um array são alocados em um espaço contínuo na memória, eles ficam próximos um dos outros para facilitar o acesso. Cada item possui um índice, com um valor atribuído.
+
+<div align="center">
+  <img width="704" height="359" alt="image" src="https://github.com/user-attachments/assets/2a0369d9-c1c0-45a6-9afb-21d53b4c4fd0" />
+</div>
+
+```
+// JavaScript Example
+
+let arr = [1,2,"a",3,4];
+
+console.log(arr[1]); // Print 2
+
+```
+
+```
+// We initialize an array
+let my_array: [i32; 4] = [1,2,3,4];
+
+// It's not possible to change the array's size at RunTime
+// This would result in a process that would have to move the allocated memory to another location
+```
+<div align="center">
+  <img width="624" height="435" alt="image" src="https://github.com/user-attachments/assets/50b5b6ef-a217-421a-af91-5685b362edb1" />
+</div>
+
+With that, Rust does not allow you to change this primitive type during runtime.
+
+```
+const a = new ArrayBuffer(8)
+
+// > a 
+// ArrayBuffer {
+//   [Uint8Contents]: <00 00 00 00 00 00 00 00>,
+//   byteLength: 8
+// }
+
+const a8 = new Uint8Array(a)
+
+// > a8
+// Uint8Array(8) [
+//   0, 0, 0, 0
+//   0, 0, 0, 0
+// ]
+
+const a32 = new Uint32Array(a)
+
+// > a32
+// Uint32Array(2) [ 0, 0 ]
+
+a32[0] = 4294967295
+
+// Uint32Array(2) [ 4294967295, 0 ]
+
+a
+
+// ArrayBuffer {
+//   [Uint8Contents]: <ff ff ff ff 00 00 00 00>,
+//   byteLength: 8
+// }
+
+a8
+
+// Uint8Array(8) [
+//   255, 255, 255, 255
+//     0,   0,   0,   0
+// ]
+```
+
+## Two Pointer
+
+Two Pointer (or "Two Pointers") is an algorithm technique used with arrays, initializing two pointers, one at the beginning and one at the end, to avoid needing to allocate additional memory space.
+
+### Reverse Words in a String
+
+If we have a phrase like "Car Tar", we should individually reverse the words within the string, resulting in: "Rac Rat".
+
+<div align="center">
+  <img width="704" height="358" alt="image" src="https://github.com/user-attachments/assets/0f59a294-737b-4b6b-9fe4-06bdd3dcbf42" />
+
+
+  The two pointers will start at the beginning of the word. Pointer R will traverse the array until it finds a blank space or the end of the word:
+
+  <img width="705" height="310" alt="image" src="https://github.com/user-attachments/assets/7f9119c7-53e8-4ace-8ae4-bb505b76c13e" />
+
+
+  Let's go back one element and swap the letter at L with the one at R:
+
+
+  <img width="707" height="328" alt="image" src="https://github.com/user-attachments/assets/c34ba841-0879-487d-bb84-3f0b93bbc3c9" />
+
+
+  With that, we will increment L by 1 and decrement R by 1, until the pointers meet each other:
+
+
+  <img width="707" height="312" alt="image" src="https://github.com/user-attachments/assets/8ed47c87-f234-4912-86ce-55577152ee83" />
+
+  Now, let's make R move until after the blank space, and bring L along with it:
+
+
+  <img width="704" height="359" alt="image" src="https://github.com/user-attachments/assets/0144d552-b95a-49a6-bf82-7d492a53caef" />
+
+
+  After this, simply repeat the process, and you will have the string with the words reversed:
+
+
+  <img width="706" height="340" alt="image" src="https://github.com/user-attachments/assets/24bb5f16-a7e7-4231-b85c-e5e5d7707c5e" />
+
+</div>
+
+This application serves (or works) in languages that allow array mutation. In our case, in Python, it's not allowed to mutate arrays, so we will need to create an extra variable where we will update it by concatenating the reversed words.
+
+```
+class Solution:
+    def reverseWords(self, s):
+        result = ''
+        l, r = 0, 0
+
+        while r < len(s):
+            if s[r] != ' ':
+                r += 1
+            else:
+                result += s[l:r+1][::-1]
+                r += 1
+                l = r
+
+        result += ' '
+        result += s[l:r + 2][::-1]
+        return result[1:]
+```
+
+## Sliding Window
+
+Sliding Window serves to find subarrays.
+Example: Find the largest subarray that can repeat a letter once.
+
+In the sliding window technique, the outer while loop will expand the window while the inner one will compress it.
+First, we'll take the first element and expand the array, storing the count of each repeated letter in the current expansion within a hashmap (dictionary in Python).
+First, we find 'b' and assign the number of 'b's that exist in the subarray:
+
+<div align="center">
+  <img width="706" height="433" alt="image" src="https://github.com/user-attachments/assets/76ed0a3f-5078-4cfa-a682-2b5947205c87" />
+
+  We expand the array and store c:
+
+  <img width="705" height="405" alt="image" src="https://github.com/user-attachments/assets/754428a5-4900-4e48-8f1f-6cc1bbad9d74" />
+
+  We expand the array and find another b:
+
+  <img width="709" height="340" alt="image" src="https://github.com/user-attachments/assets/4f72bf81-af25-42b1-9836-3b2ce45f8342" />  
+
+  Here we found 3 occurrences of 'b', meaning our max will only be the subarray 'bcb':
+
+  <img width="705" height="354" alt="image" src="https://github.com/user-attachments/assets/067d7af8-fe9d-48eb-8c24-dbfde8c326d2" />
+
+  Upon finding the most ideal subarray for our case, we have:
+
+  <img width="703" height="359" alt="image" src="https://github.com/user-attachments/assets/3ec54fab-9c68-4821-ad70-cb9ffae7669a" />
+</div>
+
+```
+class Solution:
+    def maximumLengthSubstring(self, s: str) -> int:
+        l, r = 0, 0
+        _max = 1
+        counter = {}
+
+        counter[s[0]] = 1
+
+        while r < len(s) - 1:
+            r += 1
+            if counter.get(s[r]):
+                counter[s[r]] += 1
+            else:
+                counter[s[r]] = 1
+
+            while counter[s[r]] == 3:
+                counter[s[l]] -= 1
+                l += 1
+            _max = max(_max, r - l + 1)
+        
+        return _max
+```
+
+## Exponential Search
+
+<table>
+  <thead>
+    <tr>
+      <th>Time Complexity</th>
+      <th>Space Complexity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>O(log n)</td>
+      <td>O(1)</td>
+    </tr>
+  </tbody>
+</table>
+
+Let's start at the beginning of the array, and with each search, we'll double the number of positions we jump:
+<br>
+
+Searching for the number 14:
+
+<div align="center">
+
+  <img width="705" height="289" alt="image" src="https://github.com/user-attachments/assets/dd66eab4-5270-40f2-a3f6-d586bc83bd3a" />
+
+  Skiping one:
+
+  <img width="706" height="132" alt="image" src="https://github.com/user-attachments/assets/80770294-f181-4e6d-a958-ec0e24cf3e24" />
+
+  Skiping two and leting the left pointer in the previous index of R
+
+  <img width="708" height="130" alt="image" src="https://github.com/user-attachments/assets/b86f177a-f3d3-448c-bd51-08942df97435" />
+
+  <img width="708" height="124" alt="image" src="https://github.com/user-attachments/assets/a992be9a-0892-44ff-9052-0712eb2663ee" />
+
+  <img width="707" height="136" alt="image" src="https://github.com/user-attachments/assets/8b1f882d-9304-47e9-a3f7-5b6428708e03" />
+
+  Now that our right pointer is greater than the number we are looking for, we have a subarray where our desired number will be:
+
+  <img width="703" height="130" alt="image" src="https://github.com/user-attachments/assets/e681b91f-aa73-4810-b6f4-82562e03497c" />
+
+  Inside this array we're gonna do a binary search
+</div>
+
+```
+def binary_search(nums, n, lo=8, hi=None):
+    if hi is None:
+        hi = len(nums) - 1
+    while lo < hi:
+        mid = int((10 + hi) / 2)
+    if nums[mid] == n:
+        return mid
+    elif nums[mid] < n:
+        lo = mid + 1
+    else:
+        hi = mid
+    return -1
+
+
+def exponential_search(arr, target):
+    if arr[0] == target:
+        return 0
+    n = len(arr)
+    i = 1
+    while i < n and arr[i] < target:
+        i *= 2
+    if arr[i] == target:
+        return 1
+    return binary_search(arr, target, 1 // 2, min(i, n - 1))
+```
 
 <hr>
 
