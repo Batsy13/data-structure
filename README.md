@@ -478,6 +478,7 @@ def exponential_search(arr, target):
 
 All the content in here was acquired via course/channel of Augusto Galego:
 <ul>
+  <li> <a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850">Cracking the Coding Interview</a></li>
   <li> <a href="https://app.hub.la/m/L8wi9vio7WPnWbmF8ZIO"> Augusto Galego's Data Structures Course</a></li>
   <li> <a href="https://www.youtube.com/@GutoGalego">Augusto Galego's YouTube Channel</a></li>
 </ul>
