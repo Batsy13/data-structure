@@ -39,6 +39,44 @@ class BinaryTree:
         elif value > node.value:
             return self._search_recursive(node.right, value)
         
+    def preorder_traversal(self):
+        result = []
+        
+        self._preorder_recursive(self.root, result)
+        
+        return result
+    
+    def _preorder_recursive(self, node, result):
+        if node:
+            result.append(node.value)
+            self._preorder_recursive(node.left, result)
+            self._preorder_recursive(node.right, result)
+            
+    def inorder_traversal(self):
+        result = []
+        
+        self._inorder_recursive(self.root, result)
+        
+        return result
+    
+    def _inorder_recursive(self, node, result):
+        if node:
+            self._inorder_recursive(node.left, result)
+            result.append(node.value)
+            self._inorder_recursive(node.right, result)
+            
+    def postorder_traversal(self):
+        result = []
+        
+        self._postorder_recursive(self.root, result)
+        
+        return result
+    
+    def _postorder_recursive(self, node, result):
+        if node:
+            self._postorder_recursive(node.left, result)
+            self._postorder_recursive(node.right, result)
+            result.append(node.value)
 
 binaryTree = BinaryTree()
 
@@ -49,7 +87,6 @@ binaryTree.insert(15)
 binaryTree.insert(3)
 binaryTree.insert(1)
 
-if binaryTree.search(3):
-    print("I found the number")
-else: 
-    print("I didn't find the number")
+print(f"Preorder traversal {binaryTree.preorder_traversal()}")
+print(f"Inorder traversal: {binaryTree.inorder_traversal()}")
+print(f"Postorder traversal: {binaryTree.postorder_traversal()}")
