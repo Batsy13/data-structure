@@ -1,3 +1,6 @@
+from collections import deque
+
+
 class Node:
     def __init__(self, value=0) -> None:
         self.value = value
@@ -29,7 +32,7 @@ class BinaryTree:
     def search(self, value):
         return self._search_recursive(self.root, value)
     
-    def _search_recursive(self, node, value ):
+    def _search_recursive(self, node, value):
         if node is None:
             return False
         if node.value == value:
@@ -38,6 +41,42 @@ class BinaryTree:
             return self._search_recursive(node.left, value)
         elif value > node.value:
             return self._search_recursive(node.right, value)
+        
+    def dfs(self, value):
+        return self._dfs_recursive(self.root, value)
+    
+    def _dfs_recursive(self, node, value):
+        if node:
+            print(node.value)
+        if node is None:
+            return False
+        if node.value == value:
+            return True
+
+        if self._dfs_recursive(node.left, value):
+            return True
+
+        if self._dfs_recursive(node.right, value):
+            return True
+        
+    def bfs(self, value):
+        if self.root == None:
+            return False
+        
+        queue = deque()
+        queue.append(self.root)
+        
+        while queue:
+            node = queue.popleft()
+            print(node.value)
+            if node.value == value:
+                return True
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+                
+        return False
         
     def preorder_traversal(self):
         result = []
@@ -90,3 +129,6 @@ binaryTree.insert(1)
 print(f"Preorder traversal {binaryTree.preorder_traversal()}")
 print(f"Inorder traversal: {binaryTree.inorder_traversal()}")
 print(f"Postorder traversal: {binaryTree.postorder_traversal()}")
+
+print(f"dfs: {binaryTree.dfs(22)}")
+print(f"bfs: {binaryTree.bfs(22)}")
