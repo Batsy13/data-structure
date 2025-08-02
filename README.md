@@ -38,6 +38,12 @@
         <li><a href="linked-list-functions">Linked List Functions</a></li>
       </ul>
     </li>
+    <li>
+      <a href="stack">Stack</a>
+      <ul>
+        <li><a href="implementing-a-stack">Implementing a Stack</a></li>
+      </ul>
+    </li>
     <li><a href="#credits">Credits</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -605,6 +611,86 @@ This function removes the node at the front (head) of the list. It first checks 
         return removed_value
 ```
 This function removes the node at the end (tail) of the list. It first checks if the list is empty; if so, it returns None. Otherwise, it stores the value of the current tail node. The list's tail pointer is then moved to the previous node in the sequence. If there is still a tail after the removal, its next pointer is set to None since it's now the last node. If the list becomes empty as a result of this removal, the head is also set to None. The value of the removed node is returned.
+
+# Stack
+
+<div align="center">
+  <img width="705" height="620" alt="image" src="https://github.com/user-attachments/assets/a0595f1d-19e1-460b-8baf-8abdb86c9ab9" />
+</div>
+
+<div align="center">
+  <img width="708" height="281" alt="image" src="https://github.com/user-attachments/assets/75333434-73d5-415f-a740-9d6021bacf69" />
+</div>
+
+
+## Implementing a Stack
+
+A stack uses LIFO (last-in first-out) ordering. That is, as in a stack of dinner plates, the most recent item
+added to the stack is the first item to be removed.
+
+It uses the following operations:
+<ul>
+  <li>pop( ) : Remove the top item from the stack.</li>
+  <li>push( item ): Add an item to the top of the stack.</li>
+  <li>peek( ): Return the top of the stack.</li>
+  <li>is Empty( ): Return true if and only if the stack is empty.</li>
+  <li>size( ): Return the size of the stack.</li>
+</ul>
+
+```
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+class Stack:
+    def __init__(self):
+        self.top = None
+        self._size = 0
+        
+    def push(self, item):
+        new_node = Node(item)
+        new_node.next = self.top
+        self.top = new_node
+        self._size += 1
+        
+    def pop(self):
+        if self._size == 0:
+            raise IndexError("Empty Stack")
+        
+        popped_node = self.top
+        self.top = popped_node.next
+        self._size -= 1
+        
+        return popped_node.value
+    
+    def peek(self):
+        if self._size == 0:
+            raise IndexError("Empty Stack")
+        
+        return self.top.value
+    
+    def isEmpty(self):
+        return self._size == 0
+    
+    def size(self):
+        return self._size
+    
+stack = Stack()
+
+if stack.isEmpty():
+    print("Yes")
+else: 
+    print("No")
+
+stack.push(1)
+stack.push(2)
+stack.push(3)
+
+print("Pop: ", stack.pop())
+print("Peek: ", stack.peek())
+print("Size: ", stack.size())
+```
 
 <hr>
 
