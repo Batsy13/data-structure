@@ -31,6 +31,13 @@
         <li><a href="exponential-search">Exponential Search</a></li>
       </ul>
     </li>
+    <li>
+      <a href="linked-list">Linked List</a>
+      <ul>
+        <li><a href="creating-a-linked-list">Creating a Linked List</a></li>
+        <li><a href="linked-list-functions">Linked List Functions</a></li>
+      </ul>
+    </li>
     <li><a href="#credits">Credits</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -471,6 +478,133 @@ def exponential_search(arr, target):
         return 1
     return binary_search(arr, target, 1 // 2, min(i, n - 1))
 ```
+
+# Linked List
+
+A linked list is a data structure that represents a sequence of nodes. In a singly linked list, each node
+points to the next node in the linked list. A doubly linked list gives each node pointers to both the next
+node and the previous node.
+
+<div align="center">
+  <img width="1099" height="452" alt="image" src="https://github.com/user-attachments/assets/a8fda7fb-82b2-43e6-9d50-263d09f92aed" />
+</div>
+
+Unlike an array, a linked list does not provide constant time access to a particular "index" within the list.
+This means that if you'd like to find the Kth element in the list, you will need to iterate through K elements.
+
+The benefit of a linked list is that you can add and remove items from the beginning of the list in constant
+time. For specific applications, this can be useful.
+
+<table align="center">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Read/Access</th>
+      <th>Insertion</th>
+      <th>Deletion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Linked List</td>
+      <td>O(n)</td>
+      <td>O(n)</td>
+      <td>O(n)</td>
+    </tr>
+    <tr>
+      <td>Array</td>
+      <td>O(1)</td>
+      <td>O(n)</td>
+      <td>O(1)</td>
+    </tr>
+  </tbody>
+</table>
+
+## Creating a Linked List
+
+Python Implementation
+
+```
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+        self.prev = None
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+dll = DoublyLinkedList()
+
+```
+
+### Linked List Functions
+
+#### Add ( Front )
+
+```
+    def add_to_front(self, value):
+        new_node = Node(value)
+        new_node.next = self.head
+
+        if self.head:
+            self.head.prev = new_node
+        else:
+            self.tail = new_node
+        self.head = new_node
+```
+This function creates a new node with the given value. It then sets the new node's next pointer to the current head of the list, effectively making it the new first node. If the list was not empty previously, the old head's prev pointer is updated to point to this new_node. If the list was initially empty, this new_node also becomes the tail. Finally, the list's head is updated to point to the new_node.
+
+#### Add ( End )
+
+```
+    def add_to_end(self, value):
+        new_node = Node(value)
+        new_node.prev = self.tail
+
+        if self.head:
+            self.tail.next = new_node
+        else:
+            self.head = new_node
+        self.tail = new_node
+```
+This function creates a new node with the provided value. It sets the new_node's prev pointer to the current tail of the list, positioning it to become the new last node. If the list was not empty, the old tail's next pointer is updated to point to the new_node. If the list was empty, this new_node also becomes the head. The list's tail is then updated to point to the new_node.
+
+#### Remove ( Front )
+
+```
+    def remove_from_front(self):
+
+        if not self.head:
+            return None
+        removed_value = self.head.value
+        self.head = self.head.next
+        if self.head:
+            self.head.prev = None
+        else:
+            self.tail = None
+        return removed_value
+```
+This function removes the node at the front (head) of the list. It first checks if the list is empty; if so, it returns None. Otherwise, it stores the value of the current head node. The list's head pointer is then moved to the next node in the sequence. If there is still a head after the removal, its prev pointer is set to None since it's now the first node. If the list becomes empty as a result of this removal, the tail is also set to None. The value of the removed node is returned.
+
+#### Remove ( End )
+
+```
+    def remove_from_end(self):
+        
+        if not self.tail:
+            return None
+        removed_value = self.tail.value
+        self.tail = self.tail.prev
+        if self.tail:
+            self.tail.next = None
+        else:
+            self.head = None
+        return removed_value
+```
+This function removes the node at the end (tail) of the list. It first checks if the list is empty; if so, it returns None. Otherwise, it stores the value of the current tail node. The list's tail pointer is then moved to the previous node in the sequence. If there is still a tail after the removal, its next pointer is set to None since it's now the last node. If the list becomes empty as a result of this removal, the head is also set to None. The value of the removed node is returned.
 
 <hr>
 
