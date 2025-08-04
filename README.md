@@ -44,6 +44,19 @@
         <li><a href="implementing-a-stack">Implementing a Stack</a></li>
       </ul>
     </li>
+    <li>
+      <a href="tree">Tree</a>
+      <ul>
+        <li><a href="trees-vs.-binary-trees">Trees vs. Binary Trees</a></li>
+        <li><a href="bianry-tree-vs.-binary-search-tree">Binary Tree vs. Binary Search Tree</a></li>
+        <li><a href="balanced-vs.-unbalanced">Balanced vs. Unbalanced</a></li>
+        <ul>
+          <li><a href="avl-trees">AVL Trees</a></li>
+        </ul>
+        <li><a href="types-of-binary-trees">Types of Binary Trees</a></li>
+        <li><a href="binary-tree-traversal">Binary Tree Traversal</a></li>
+      </ul>
+    </li>
     <li><a href="#credits">Credits</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -691,6 +704,208 @@ print("Pop: ", stack.pop())
 print("Peek: ", stack.peek())
 print("Size: ", stack.size())
 ```
+
+# Tree
+
+A tree is a data structure composed of nodes.
+
+<ul>
+  <li>Each tree has a root node.</li>
+  <li>The root node has zero or more child nodes.</li>
+  <li>Each child node has zero or more child nodes, and so on.</li>
+  <li>A node is called a "leaf" node if it has no children.</li>
+</ul>
+
+The tree cannot contain cycles. The nodes may or may not be in a particular order, they could have any data type as values, and they may or may not have links back to their parent nodes.
+
+Here it is an example of a binary tree definition in python:
+
+```
+class Node:
+  def __init__(self, val=0) -> None:
+    self.val = val
+    self.left = None
+    self.right = None
+```
+
+
+```
+class BinaryTree:
+  def __init__(self) -> None:
+    self.root = None
+```
+
+## Trees vs. Binary Trees
+
+A binary tree is a tree in which each node has up to two children. Not all trees are binary trees. For example,this tree is not a binary tree. You could call it a ternary tree.
+
+<div align="center">
+  <img width="1023" height="723" alt="image" src="https://github.com/user-attachments/assets/ad8ae8dc-6f36-49b0-a9de-c6d37b5c57b3" />
+</div>
+
+## Binary Tree vs. Binary Search Tree
+
+A binary search tree is a binary tree in which every node fits a specific ordering property: all left descendents <= n < all right descendents. This must be true for each node n.
+
+<div align="center">
+  <img width="1678" height="631" alt="image" src="https://github.com/user-attachments/assets/b14d4bbb-30ad-4485-a353-abd3b15d56ac" />
+</div>
+
+## Balanced vs. Unbalanced
+
+### AVL Trees
+
+An AVL tree it's a common way to implement tree balancing
+
+#### Properties
+
+An AVL tree stores in each node the height of the subtrees rooted at this node. Then, for any node, we can
+check if it is height balanced: that the height of the left subtree and the height of the right subtree differ by
+no more than one. This prevents situations where the tree gets too lopsided.
+
+<div align="center">
+  balance(n) = n.left.height - n.right.height -1 <= balance(n) <= 1
+</div>
+
+#### Inserts
+
+When you insert a node, the balance of some nodes might change to -2 or 2. Therefore, when we "unwind" the recursive stack, we check and fix the balance at each node. We do this through a series of rotations.
+
+Rotations can be either left or right rotations. The right rotation is an inverse of the left rotation.
+
+<div align="center">
+  <img width="1795" height="866" alt="image" src="https://github.com/user-attachments/assets/7b8a8189-bd63-4bbc-a485-8bd4611b41a2" />
+</div>
+
+
+Left Rotation
+<div align="center">
+  <img width="1390" height="731" alt="image" src="https://github.com/user-attachments/assets/b3e4ef3a-d28b-4c62-b2e8-6b31ef3a3576" />
+</div>
+
+
+Right Rotation
+<div align="center">
+  <img width="1239" height="636" alt="image" src="https://github.com/user-attachments/assets/f56b40af-7b36-46c7-9dde-639ee380ad25" />
+</div>
+
+
+Left-Right Rotation
+<div align="center">
+  <img width="1618" height="783" alt="image" src="https://github.com/user-attachments/assets/6d54bbc1-f3c5-4873-8ddd-c312c86613bc" />
+</div>
+
+Right-Left Rotation
+
+<div align="center">
+  <img width="1480" height="793" alt="image" src="https://github.com/user-attachments/assets/b49078fa-016c-43bd-b843-06f39248c4ad" />
+</div>
+
+#### Types of Binary Trees
+
+##### Complete Binary Trees
+
+A complete binary tree is a binary tree in which every level of the tree is fully filled, except for perhaps the
+last level. To the extent that the last level is filled, it is filled left to right.
+
+<div align="center">
+  <img width="1436" height="573" alt="image" src="https://github.com/user-attachments/assets/1abb2ebc-e765-4857-871d-077e40db053e" />
+</div>
+
+##### Full Binary Trees
+
+A full binary tree is a binary tree in which every node has either zero or two children. That is, no nodes have
+only one child.
+
+<div align="center">
+  <img width="1104" height="613" alt="image" src="https://github.com/user-attachments/assets/cabfcb49-c2a2-4e32-b9dc-9eba35d89c54" />
+</div>
+
+##### Perfect Binary Trees
+
+A perfect binary tree is one that is both full and complete. All leaf nodes will be at the same level, and this
+level has the maximum number of nodes.
+
+<div align="center">
+  <img width="759" height="539" alt="image" src="https://github.com/user-attachments/assets/8080f34e-2c51-4059-ab18-8ef2f6afd60c" />
+</div>
+
+#### Binary Tree Traversal
+
+In this cases, i'm gonna use this tree as example:
+
+<div align="center">
+  <img width="826" height="512" alt="image" src="https://github.com/user-attachments/assets/401cca14-3ab5-4312-9e9e-f09ee5193545" />
+</div>
+
+**In-Order Traversal (Left-Root-Right)**
+
+Visits the nodes in the following order: traverse the left subtree, visit the root node, then traverse the right subtree. For a Binary Search Tree, an in-order traversal visits nodes in non-decreasing order. It's just place the items in order.
+
+```
+void inOrderTraversal(TreeNode node) {
+ if (node!= null) {
+   inOrderTraversal(node.left);
+   visit(node);
+   inOrderTraversal(node.right);
+ }
+}
+```
+
+<div align="center">
+  [3,5,8,10,12,20,21]
+</div>
+
+---
+
+**Pre-Order Traversal (Root-Left-Right)**
+
+Visits the nodes in the following order: visit the root node, traverse the left subtree, then traverse the right subtree. Pre-order traversal is useful for creating a copy of the tree or for prefix expressions.
+
+```
+void preOrderTraversal(TreeNode node) {
+ if (node!= null) {
+   visit(node);
+   preOrderTraversal(node.left);
+   preOrderTraversal(node.right);
+ }
+}
+```
+
+For this case, when the flow touches de left side of the node we're gonna add to the array. ( visual )
+
+<div align="center">
+  <img width="969" height="694" alt="image" src="https://github.com/user-attachments/assets/1584dbb9-cc0a-4510-b9a8-cc3052c1aeee" />
+</div>
+
+<div align="center">
+  [10,5,3,8,20,12,21]
+</div>
+
+---
+
+**Post-Order Traversal (Left-Right-Root)**
+
+Visits the nodes in the following order: traverse the left subtree, traverse the right subtree, then visit the root node. Post-order traversal is useful for deleting a tree or for postfix expressions.
+
+```
+void postOrderTraversal(TreeNode node) {
+ if (node!= null) {
+   postOrderTraversal(node.left);
+   postOrderTraversal(node.right);
+   visit(node);
+ }
+}
+```
+
+For this case, when the flow touches de right side of the node we're gonna add to the array. ( visual )
+
+<div align="center">
+  <img width="946" height="673" alt="image" src="https://github.com/user-attachments/assets/b9faed90-92e1-4527-a293-caec9d28ebfa" />
+</div>
+<div align="center">
+  [3,8,5,12,21,20,10]
+</div>
 
 <hr>
 
