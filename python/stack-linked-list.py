@@ -30,10 +30,18 @@ class Stack:
         
         return self.top.value
     
+    def isEmpty(self):
+        return self._size == 0
+    
     def size(self):
         return self._size
     
 stack = Stack()
+
+if stack.isEmpty():
+    print("Yes")
+else: 
+    print("No")
 
 stack.push(1)
 stack.push(2)
