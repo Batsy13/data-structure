@@ -115,7 +115,7 @@ class DenseGraph(Graph):
             self.adjacency_matrix[idx_u][idx_v] = 0
             if u != v:
                 self.adjacency_matrix[idx_v][idx_u] = 0
-            self.number_edges -= 0
+            self.number_edges -= 1
         
     def print_graph(self):
         if self.num_of_edges == 0:
