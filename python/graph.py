@@ -299,7 +299,6 @@ class SparseGraph(Graph):
         return self.number_edges == expected_edges
     
     def is_isomorphic(self, other_graph):
-        from itertools import permutations
 
         if not isinstance(other_graph, SparseGraph):
             raise TypeError("Isomorphism can only be checked between two SparseGraph instances.")
