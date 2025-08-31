@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from itertools import permutations
 
 class Graph(ABC):
     
@@ -37,6 +38,10 @@ class Graph(ABC):
 
     @abstractmethod
     def is_complete(self):
+        pass
+    
+    @abstractmethod
+    def is_isomorphic(self, other_graph):
         pass
 
 class DenseGraph(Graph):
@@ -163,6 +168,37 @@ class DenseGraph(Graph):
         
         expected_edges = self.num_vertices * (self.num_vertices - 1) // 2
         return self.number_edges == expected_edges
+    
+    def is_isomorphic(self, other_graph):
+        if not isinstance(other_graph, DenseGraph):
+            raise TypeError("Isomorphism can only be checked between two DenseGraph instances.")
+
+        if self.num_of_vertices() != other_graph.num_of_vertices():
+            return False
+
+        if self.num_of_edges() != other_graph.num_of_edges():
+            return False
+
+        if sorted(self.degree_sequence()) != sorted(other_graph.degree_sequence()):
+            return False
+
+        n = self.num_of_vertices()
+        other_indices = list(range(n))
+        
+        for p in permutations(other_indices):
+            is_match = True
+            for i in range(n):
+                for j in range(n):
+                    if self.adjacency_matrix[i][j] != other_graph.adjacency_matrix[p[i]][p[j]]:
+                        is_match = False
+                        break
+                if not is_match:
+                    break
+            
+            if is_match:
+                return True
+                
+        return False
 
 
 class SparseGraph(Graph):
@@ -261,6 +297,51 @@ class SparseGraph(Graph):
         
         expected_edges = self.num_vertices * (self.num_vertices - 1) // 2
         return self.number_edges == expected_edges
+    
+    def is_isomorphic(self, other_graph):
+        from itertools import permutations
+
+        if not isinstance(other_graph, SparseGraph):
+            raise TypeError("Isomorphism can only be checked between two SparseGraph instances.")
+
+        if self.num_of_vertices() != other_graph.num_of_vertices():
+            return False
+
+        if self.num_of_edges() != other_graph.num_of_edges():
+            return False
+
+        if self.degree_sequence() != other_graph.degree_sequence():
+            return False
+
+        n = self.num_of_vertices()
+        
+        self_nodes = [self.indices_map[i] for i in range(n)]
+        other_nodes = [other_graph.indices_map[i] for i in range(n)]
+
+        for p_other_nodes in permutations(other_nodes):
+            
+            mapping = {self_nodes[i]: p_other_nodes[i] for i in range(n)}
+            
+            is_match = True
+            for i in range(n):
+                for j in range(i, n):
+                    u_self, v_self = self_nodes[i], self_nodes[j]
+                    u_other, v_other = mapping[u_self], mapping[v_self]
+
+                    is_edge_in_self = v_self in self.adjacency_list.get(u_self, [])
+                    
+                    is_edge_in_other = v_other in other_graph.adjacency_list.get(u_other, [])
+
+                    if is_edge_in_self != is_edge_in_other:
+                        is_match = False
+                        break
+                if not is_match:
+                    break
+            
+            if is_match:
+                return True
+
+        return False
 
 # graph = DenseGraph(["A","B","C","D","E"])
 
@@ -281,86 +362,6 @@ class SparseGraph(Graph):
 # graph.remove_edge("A", "C")
 
 # graph.print_graph()
-
-class SparseGraph(Graph):
-    def __init__(self, num_vertices_or_labels):
-        self.vertices_map = {}
-        self.indices_map = {}
-        self.number_edges = 0
-        
-        if isinstance(num_vertices_or_labels, int):
-            
-            self.num_vertices = num_vertices_or_labels
-            
-            for i in range(self.num_vertices):
-                self.vertices_map[i] = i
-                self.indices_map[i] = i  
-        elif isinstance(num_vertices_or_labels, list):
-            
-            self.num_vertices = len(num_vertices_or_labels)
-            
-            for i, label in enumerate(num_vertices_or_labels):
-                
-                if label in self.vertices_map:
-                    raise ValueError(f"Duplicated label '{label}' in the vertex list")
-                
-                self.vertices_map[label] = i
-                self.indices_map[i] = label
-            
-        else:
-            raise ValueError("Argumento must be an integer number of vertices or a list of labels")
-        
-        self.adjacency_list = defaultdict(list) 
-        
-    def num_of_vertices(self):
-        return self.num_vertices
-    
-    def num_of_edges(self):
-        return self.number_edges
-    
-    def degree_sequence(self):
-        return sorted([len(self.adjacency_list[row]) for row in self.adjacency_list])
-        
-    def _get_index(self, label):
-        if label not in self.vertices_map:
-            raise ValueError(f"Vertex '{label}' does not exist on graph") 
-        
-        return self.vertices_map[label]
-        
-    def add_edge(self, u, v):
-        try:
-            self._get_index(u)
-            self._get_index(v)
-        except:
-            print(f"Could not add Edge ({u}, {v})")
-            return
-        
-        self.adjacency_list[u].append(v)
-        self.adjacency_list[v].append(u)
-        self.number_edges += 1
-        print(f"Edge added between {u} and {v}")
-                
-        
-    def remove_edge(self, u, v):
-        try:
-            self._get_index(u)
-            self._get_index(v)
-        except:
-            print(f"Could not remove Edge ({u}, {v})")
-            
-        print(f"Removing edge between {u} and {v}")
-        self.adjacency_list[u].remove(v)
-        self.number_edges -= 1
-        
-    def print_graph(self):
-        if self.num_of_edges == 0:
-            print("Graph is Empty")
-            return
-        
-        print("\nGraph Representation (Adjacency List):")
-        for vertex, neighbors in self.adjacency_list.items():
-            print(f"{vertex} -> {" ".join(map(str,neighbors))}")
-
 
 # graph2 = SparseGraph(["A","B","C","D","E"])
 
